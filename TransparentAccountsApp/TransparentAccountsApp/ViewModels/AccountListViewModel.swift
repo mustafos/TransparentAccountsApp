@@ -16,9 +16,9 @@ class AccountListViewModel: ObservableObject {
 
     func loadAccounts() {
         isLoading = true
-        service.fetchAccounts { [weak self] accounts in
+        service.fetchAccounts { [weak self] fetched in
             DispatchQueue.main.async {
-                self?.accounts = accounts
+                self?.accounts = fetched
                 self?.isLoading = false
             }
         }

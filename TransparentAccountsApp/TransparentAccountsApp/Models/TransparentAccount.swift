@@ -7,14 +7,20 @@
 
 import Foundation
 
-struct TransparentAccount: Decodable, Identifiable {
-    let id: String
-    let name: String
-    let accountNumber: String
+struct AccountsResponse: Decodable {
+    let accounts: [TransparentAccount]
+}
 
-    enum CodingKeys: String, CodingKey {
-        case id = "id"
-        case name = "description"
-        case accountNumber = "accountNumber"
-    }
+struct TransparentAccount: Codable, Identifiable {
+    var id: String { accountNumber }
+    let accountNumber: String
+    let bankCode: String
+    let transparencyFrom: String
+    let transparencyTo: String
+    let publicationTo: String
+    let actualizationDate: String
+    let balance: Double
+    let currency: String? 
+    let name: String
+    let iban: String
 }

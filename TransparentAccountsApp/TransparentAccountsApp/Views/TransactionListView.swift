@@ -23,7 +23,7 @@ struct TransactionListView: View {
                 ForEach(viewModel.transactions) { transaction in
                     NavigationLink(destination: DetailView(transaction: transaction)) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("💸 \(transaction.amount, specifier: "%.2f") \(transaction.currency)")
+                            Text("💸 \(transaction.amount, specifier: "%.2f") \(transaction.currency ?? "")")
                                 .font(.headline)
                             if let name = transaction.counterPartyName {
                                 Text("From: \(name)").font(.subheadline)
@@ -39,7 +39,7 @@ struct TransactionListView: View {
         }
         .navigationTitle(account.name)
         .onAppear {
-            viewModel.loadTransactions(accountId: account.id)
+            viewModel.loadTransactions(accountId: account.accountNumber)
         }
     }
 }

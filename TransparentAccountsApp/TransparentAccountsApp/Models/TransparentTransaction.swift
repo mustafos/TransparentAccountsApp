@@ -11,21 +11,45 @@ struct Transaction: Decodable, Identifiable {
     let id = UUID()
     let amount: Double
     let currency: String
-    let counterPartyName: String?
+    let processingDate: String?
+    let typeDescription: String?
+    let senderName: String?
     let remittanceInfo: String?
+    let counterPartyName: String?
+    let transactionDate: String?
+    let specification: String?
 
     enum CodingKeys: String, CodingKey {
-        case amount = "amount"
-        case currency = "currency"
-        case counterPartyName = "counterPartyName"
-        case remittanceInfo1
+        case amount, processingDate, typeDescription, remittanceInfo, counterPartyName, transactionDate, specification
+        case sender
+    }
+
+    enum AmountKeys: String, CodingKey {
+        case value, currency
+    }
+
+    enum SenderKeys: String, CodingKey {
+        case name
     }
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        amount = try container.decode(Double.self, forKey: .amount)
-        currency = try container.decode(String.self, forKey: .currency)
+
+        let amountContainer = try container.nestedContainer(keyedBy: AmountKeys.self, forKey: .amount)
+        amount = try amountContainer.decode(Double.self, forKey: .value)
+        currency = try amountContainer.decode(String.self, forKey: .currency)
+
+        processingDate = try container.decodeIfPresent(String.self, forKey: .processingDate)
+        typeDescription = try container.decodeIfPresent(String.self, forKey: .typeDescription)
+        remittanceInfo = try container.decodeIfPresent(String.self, forKey: .remittanceInfo)
         counterPartyName = try container.decodeIfPresent(String.self, forKey: .counterPartyName)
-        remittanceInfo = try container.decodeIfPresent(String.self, forKey: .remittanceInfo1)
+        transactionDate = try container.decodeIfPresent(String.self, forKey: .transactionDate)
+        specification = try container.decodeIfPresent(String.self, forKey: .specification)
+
+        if let senderContainer = try? container.nestedContainer(keyedBy: SenderKeys.self, forKey: .sender) {
+            senderName = try senderContainer.decodeIfPresent(String.self, forKey: .name)
+        } else {
+            senderName = nil
+        }
     }
 }

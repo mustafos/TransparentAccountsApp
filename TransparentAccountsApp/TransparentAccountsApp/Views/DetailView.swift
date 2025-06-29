@@ -22,13 +22,36 @@ struct DetailView: View {
                 }
             }
 
+            if let sender = transaction.senderName {
+                Section(header: Text("Sender")) {
+                    Text(sender)
+                }
+            }
+
             if let info = transaction.remittanceInfo {
-                Section(header: Text("Note")) {
+                Section(header: Text("Remittance Info")) {
                     Text(info)
+                }
+            }
+
+            if let spec = transaction.specification {
+                Section(header: Text("Specification")) {
+                    Text(spec)
+                }
+            }
+
+            if let date = transaction.transactionDate {
+                Section(header: Text("Transaction Date")) {
+                    Text(date)
+                }
+            }
+
+            if let date = transaction.processingDate {
+                Section(header: Text("Processing Date")) {
+                    Text(date)
                 }
             }
         }
         .navigationTitle("Transaction Detail")
     }
 }
-
