@@ -1,5 +1,5 @@
 //
-//  TransparentTransaction.swift
+//  Transaction.swift
 //  TransparentAccountsApp
 //
 //  Created by Mustafa Bekirov on 29.06.2025.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TransparentTransaction: Decodable, Identifiable {
+struct Transaction: Decodable, Identifiable {
     let id = UUID()
     let amount: Double
     let currency: String

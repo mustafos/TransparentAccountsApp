@@ -9,7 +9,7 @@ import Foundation
 
 class CSASService {
     private let baseURL = Configurations.baseUrl
-
+    
     func fetchAccounts(completion: @escaping ([TransparentAccount]) -> Void) {
         guard let url = URL(string: baseURL) else { return }
 
@@ -23,14 +23,16 @@ class CSASService {
             }
 
             if let accounts = try? JSONDecoder().decode([TransparentAccount].self, from: data) {
+                print("✅ Loaded accounts:", accounts)
                 completion(accounts)
             } else {
+                print("❌ Failed to decode accounts")
                 completion([])
             }
         }.resume()
     }
 
-    func fetchTransactions(for accountId: String, completion: @escaping ([TransparentTransaction]) -> Void) {
+    func fetchTransactions(for accountId: String, completion: @escaping ([Transaction]) -> Void) {
         let urlString = "\(baseURL)/\(accountId)/transactions"
         guard let url = URL(string: urlString) else { return }
 
@@ -44,7 +46,7 @@ class CSASService {
             }
 
             struct Wrapper: Decodable {
-                let transactions: [TransparentTransaction]
+                let transactions: [Transaction]
             }
 
             if let wrapper = try? JSONDecoder().decode(Wrapper.self, from: data) {
