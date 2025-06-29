@@ -25,16 +25,14 @@ struct AccountListView: View {
                         NavigationLink(destination: AccountDetailView(account: account)) {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(account.name).font(.headline)
-                                Text(account.accountNumber).font(.subheadline).foregroundColor(.secondary)
-                                Text("💰 \(account.balance, specifier: "%.2f") \(account.currency ?? "")")
-                                    .font(.caption)
+                                Text("💰 \(account.balance, specifier: "%.2f")")
+                                    .font(.subheadline)
                                     .foregroundColor(.gray)
                             }.padding(.vertical, 4)
                         }
                     }
                 }
-            }
-            .navigationTitle("Transparent Accounts")
+            }.navigationTitle("Transparent Accounts")
         }
         .task {
             await viewModel.loadAccounts()
@@ -55,29 +53,4 @@ struct AccountListView: View {
 
 #Preview {
     AccountListView()
-}
-
-import SwiftUI
-
-struct AccountDetailView: View {
-    let account: TransparentAccount
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(account.name)
-                .font(.title2)
-            Text("Account Number: \(account.accountNumber)")
-                .foregroundColor(.secondary)
-            Text("Balance: \(account.balance, specifier: "%.2f") \(account.currency ?? "")")
-                .foregroundColor(.gray)
-
-            NavigationLink("📄 View Transactions") {
-                TransactionListView(account: account)
-            }
-
-            Spacer()
-        }
-        .padding()
-        .navigationTitle("Account Detail")
-    }
 }

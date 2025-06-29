@@ -22,21 +22,32 @@ struct TransactionListView: View {
             } else {
                 ForEach(viewModel.transactions) { transaction in
                     NavigationLink(destination: DetailView(transaction: transaction)) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("💸 \(transaction.amount, specifier: "%.2f") \(transaction.currency ?? "")")
-                                .font(.headline)
-                            if let name = transaction.counterPartyName {
-                                Text("From: \(name)").font(.subheadline)
+                        HStack(spacing: 12) {
+                            Image(systemName: transaction.amount >= 0 ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
+                                .font(.title2)
+                                .foregroundColor(transaction.amount >= 0 ? .green : .red)
+                            
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("\(transaction.amount, specifier: "%.2f") \(transaction.currency)")
+                                    .font(.headline)
+                                    .foregroundColor(transaction.amount >= 0 ? .green : .red)
+                                
+                                if let name = transaction.counterPartyName {
+                                    Text("From: \(name)").font(.subheadline)
+                                }
+                                
+                                if let info = transaction.remittanceInfo {
+                                    Text(info).font(.footnote).foregroundColor(.gray)
+                                }
                             }
-                            if let info = transaction.remittanceInfo {
-                                Text(info).font(.footnote).foregroundColor(.gray)
-                            }
-                        }.padding(.vertical, 4)
+                        }
+                        .padding(.vertical, 6)
                     }
                 }
             }
         }
-        .navigationTitle(account.name)
+        .navigationTitle("Transaction")
+        .navigationBarTitleDisplayMode(.inline)
         .task {
             print("🔄 Loading transactions for", account.accountNumber)
             await viewModel.loadTransactions(accountId: account.accountNumber)

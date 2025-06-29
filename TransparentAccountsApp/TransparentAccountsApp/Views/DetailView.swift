@@ -42,13 +42,13 @@ struct DetailView: View {
             
             if let date = transaction.transactionDate {
                 Section(header: Text("Transaction Date")) {
-                    Text(date)
+                    Text(date.formattedDate())
                 }
             }
             
             if let date = transaction.processingDate {
                 Section(header: Text("Processing Date")) {
-                    Text(date)
+                    Text(date.formattedDate())
                 }
             }
         }
