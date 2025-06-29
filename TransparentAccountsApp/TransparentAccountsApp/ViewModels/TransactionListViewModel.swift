@@ -6,31 +6,39 @@
 //
 
 import Foundation
-import os
+
+enum TransactionViewState {
+    case idle, loading, success([Transaction]), empty, error(String)
+}
 
 @MainActor
-class TransactionListViewModel: ObservableObject {
-    @Published var transactions: [Transaction] = []
-    @Published var isLoading = false
-    @Published var alertMessage: String?
+final class TransactionListViewModel: ObservableObject {
+    private let service: CSASServiceProtocol
+    private let logger: LoggerProtocol
     
-    private let service = CSASService()
+    @Published var transactions: [Transaction] = []
+    @Published var state: TransactionViewState = .idle
+    
+    init(service: CSASServiceProtocol = CSASService(), logger: LoggerProtocol = Logger()) {
+        self.service = service
+        self.logger = logger
+    }
     
     func loadTransactions(accountId: String) async {
-        isLoading = true
-        os_log("🔄 Start loading transactions for %{public}s", log: CSASLog.general, type: .info, accountId)
-        transactions = []
-        defer {
-            isLoading = false
-            os_log("✅ Finished loading transactions for %{public}s", log: CSASLog.general, type: .info, accountId)
-        }
+        state = .loading
+        logger.log(.loadingTransactions(accountId: accountId))
         
         do {
-            transactions = try await service.fetchTransactions(for: accountId)
+            let txs = try await service.fetchTransactions(for: accountId)
+            transactions = txs
+            if txs.isEmpty {
+                state = .empty
+            } else {
+                state = .success(txs)
+            }
         } catch {
-            alertMessage = error.localizedDescription
-            transactions = []
-            os_log("❌ Failed to load transactions: %@", log: CSASLog.general, type: .error, error.localizedDescription)
+            logger.log(.unknownError("❌ Error loading txs: \(error.localizedDescription)"))
+            state = .error(error.localizedDescription)
         }
     }
 }
