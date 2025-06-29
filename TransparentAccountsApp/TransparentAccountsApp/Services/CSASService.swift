@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import os
 
 protocol CSASServiceProtocol {
     func fetchAccounts() async throws -> [TransparentAccount]
@@ -22,13 +21,13 @@ enum CSASError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidURL:
-            return "❌ Invalid URL."
+            return "Invalid URL."
         case .decodingError:
-            return "❌ Failed to decode server response."
+            return "Failed to decode server response."
         case .httpError(let code, let message):
-            return "❌ HTTP \(code): \(message ?? "Unknown error")"
+            return "HTTP \(code): \(message ?? "Unknown error")"
         case .unknown:
-            return "❌ Unknown error occurred."
+            return "Unknown error occurred."
         }
     }
 }
@@ -36,14 +35,18 @@ enum CSASError: LocalizedError {
 final class CSASService: CSASServiceProtocol {
     private let baseURL = Configurations.baseUrl
     private let apiKey = Secrets.csasApiKey
+    private let logger: LoggerProtocol
     
-    /// Generic method to fetch and decode any Decodable response
+    init(logger: LoggerProtocol = Logger()) {
+        self.logger = logger
+    }
+    
     private func fetch<T: Decodable>(_ path: String) async throws -> T {
         let fullPath = baseURL + path
-        os_log("🌐 Fetching: %@", log: CSASLog.network, type: .debug, fullPath)
+        logger.log(.transactionDebug("🌐 Fetching: \(fullPath)"))
         
         guard let url = URL(string: fullPath) else {
-            os_log("🚫 Invalid URL: %@", log: CSASLog.network, type: .error, fullPath)
+            logger.log(.invalidURL(fullPath))
             throw CSASError.invalidURL
         }
         
@@ -56,48 +59,45 @@ final class CSASService: CSASServiceProtocol {
             let (data, response) = try await URLSession.shared.data(for: request)
             try handleHTTPError(data: data, response: response)
             let decoded = try JSONDecoder().decode(T.self, from: data)
-            os_log("✅ Decoded response for path: %@", log: CSASLog.decoding, type: .info, path)
+            logger.log(.transactionDebug("✅ Decoded response for path: \(path)"))
             return decoded
         } catch {
             if let csasError = error as? CSASError {
-                os_log("❌ CSAS error: %@", log: CSASLog.general, type: .error, csasError.localizedDescription)
+                logger.log(.unknownError(csasError.localizedDescription))
             } else {
-                os_log("❌ Unexpected error: %@", log: CSASLog.general, type: .error, error.localizedDescription)
+                logger.log(.unknownError(error.localizedDescription))
             }
             throw error
         }
     }
     
-    /// Load accounts
     func fetchAccounts() async throws -> [TransparentAccount] {
-        os_log("📥 Loading accounts...", log: CSASLog.general, type: .info)
+        logger.log(.loadingAccounts)
         let response: AccountsResponse = try await fetch("")
-        os_log("📦 Loaded %d accounts", log: CSASLog.general, type: .info, response.accounts.count)
+        logger.log(.loadedAccounts(count: response.accounts.count))
         return response.accounts
     }
     
-    /// Load transactions for account
     func fetchTransactions(for accountId: String) async throws -> [Transaction] {
         let encodedId = accountId.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? accountId
-        os_log("📥 Loading transactions for %{public}s...", log: CSASLog.general, type: .info, accountId)
+        logger.log(.loadingTransactions(accountId: accountId))
         let response: TransactionsResponse = try await fetch("/\(encodedId)/transactions")
-        os_log("📦 Loaded %d transactions for %{public}s", log: CSASLog.general, type: .info, response.transactions.count, accountId)
+        logger.log(.loadedTransactions(accountId: accountId, count: response.transactions.count))
         if let first = response.transactions.first {
-            os_log("📌 First transaction: %@", log: CSASLog.general, type: .debug, "\(first)")
+            logger.log(.transactionDebug("\(first)"))
         }
         return response.transactions
     }
     
-    /// Error handling
     private func handleHTTPError(data: Data, response: URLResponse) throws {
         guard let httpResponse = response as? HTTPURLResponse else {
-            os_log("⚠️ Not an HTTP response", log: CSASLog.network, type: .error)
+            logger.log(.unknownError("⚠️ Not an HTTP response"))
             throw CSASError.unknown
         }
         
         guard (200..<300).contains(httpResponse.statusCode) else {
             let message = parseErrorMessage(from: data)
-            os_log("❗️HTTP %d: %@", log: CSASLog.network, type: .error, httpResponse.statusCode, message ?? "No message")
+            logger.log(.httpError(code: httpResponse.statusCode, message: message))
             throw CSASError.httpError(code: httpResponse.statusCode, message: message)
         }
     }

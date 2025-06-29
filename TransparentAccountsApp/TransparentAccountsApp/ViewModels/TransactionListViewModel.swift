@@ -15,16 +15,19 @@ enum TransactionViewState {
 @MainActor
 final class TransactionListViewModel: ObservableObject {
     private let service: CSASServiceProtocol
+    private let logger: LoggerProtocol
+    
     @Published var transactions: [Transaction] = []
     @Published var state: TransactionViewState = .idle
     
-    init(service: CSASServiceProtocol = CSASService()) {
+    init(service: CSASServiceProtocol = CSASService(), logger: LoggerProtocol = Logger()) {
         self.service = service
+        self.logger = logger
     }
     
     func loadTransactions(accountId: String) async {
         state = .loading
-        os_log("🔄 Loading for %{public}s", log: CSASLog.general, type: .info, accountId)
+        logger.log(.loadingTransactions(accountId: accountId))
         
         do {
             let txs = try await service.fetchTransactions(for: accountId)
@@ -35,8 +38,8 @@ final class TransactionListViewModel: ObservableObject {
                 state = .success(txs)
             }
         } catch {
+            logger.log(.unknownError("❌ Error loading txs: \(error.localizedDescription)"))
             state = .error(error.localizedDescription)
-            os_log("❌ Error loading txs: %@", log: CSASLog.general, type: .error, error.localizedDescription)
         }
     }
 }
