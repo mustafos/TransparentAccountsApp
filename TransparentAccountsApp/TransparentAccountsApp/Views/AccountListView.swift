@@ -38,12 +38,19 @@ struct AccountListView: View {
                     }
                 }
             }
+            .navigationTitle("Transparent Accounts")
         }
-        .navigationTitle("Transparent Accounts")
         .task {
-                        await viewModel.loadAccounts()
-                    }
-
+            await viewModel.loadAccounts()
+        }
+        .alert("Error", isPresented: Binding(
+            get: { viewModel.alertMessage != nil },
+            set: { _ in viewModel.alertMessage = nil }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.alertMessage ?? "Unknown error")
+        }
     }
 }
 

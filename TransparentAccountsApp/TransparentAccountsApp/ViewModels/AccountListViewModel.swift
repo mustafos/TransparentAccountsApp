@@ -11,12 +11,19 @@ import Foundation
 class AccountListViewModel: ObservableObject {
     @Published var accounts: [TransparentAccount] = []
     @Published var isLoading = false
-
+    @Published var alertMessage: String?
+    
     private let service = CSASService()
-
+    
     func loadAccounts() async {
         isLoading = true
-        accounts = await service.fetchAccounts()
-        isLoading = false
+        defer { isLoading = false }
+        
+        do {
+            accounts = try await service.fetchAccounts()
+        } catch {
+            alertMessage = error.localizedDescription
+            accounts = []
+        }
     }
 }

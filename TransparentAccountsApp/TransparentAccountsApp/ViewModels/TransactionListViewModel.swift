@@ -11,12 +11,19 @@ import Foundation
 class TransactionListViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
     @Published var isLoading = false
-
+    @Published var alertMessage: String?
+    
     private let service = CSASService()
-
+    
     func loadTransactions(accountId: String) async {
         isLoading = true
-        transactions = await service.fetchTransactions(for: accountId)
-        isLoading = false
+        defer { isLoading = false }
+        
+        do {
+            transactions = try await service.fetchTransactions(for: accountId)
+        } catch {
+            alertMessage = error.localizedDescription
+            transactions = []
+        }
     }
 }

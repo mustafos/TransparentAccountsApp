@@ -10,7 +10,7 @@ import SwiftUI
 struct TransactionListView: View {
     let account: TransparentAccount
     @StateObject private var viewModel = TransactionListViewModel()
-
+    
     var body: some View {
         List {
             if viewModel.isLoading {
@@ -39,7 +39,15 @@ struct TransactionListView: View {
         }
         .navigationTitle(account.name)
         .task {
-                    await viewModel.loadTransactions(accountId: account.accountNumber)
-                }
+            await viewModel.loadTransactions(accountId: account.accountNumber)
+        }
+        .alert("Error", isPresented: Binding(
+            get: { viewModel.alertMessage != nil },
+            set: { _ in viewModel.alertMessage = nil }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(viewModel.alertMessage ?? "Unknown error")
+        }
     }
 }

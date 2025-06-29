@@ -7,10 +7,6 @@
 
 import Foundation
 
-struct AccountsResponse: Decodable {
-    let accounts: [TransparentAccount]
-}
-
 struct TransparentAccount: Codable, Identifiable {
     var id: String { accountNumber }
     let accountNumber: String
@@ -20,7 +16,7 @@ struct TransparentAccount: Codable, Identifiable {
     let publicationTo: String
     let actualizationDate: String
     let balance: Double
-    let currency: String? 
+    let currency: String?
     let name: String
     let iban: String
 }

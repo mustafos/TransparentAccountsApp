@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct TransparentAccountsAppApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            LaunchView()
+            AccountListView()
         }
     }
 }
