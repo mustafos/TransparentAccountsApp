@@ -1,5 +1,5 @@
 //
-//  Date+Ext.swift
+//  DateFormatter+Extensions.swift
 //  TransparentAccountsApp
 //
 //  Created by Mustafa Bekirov on 29.06.2025.
@@ -16,7 +16,7 @@ extension String {
 
         let outputFormatter = DateFormatter()
         outputFormatter.dateFormat = outputFormat
-        outputFormatter.locale = Locale(identifier: "cs_CZ") // или "uk_UA"
+        outputFormatter.locale = Locale(identifier: "cs_CZ")
 
         guard let date = inputFormatter.date(from: self) else {
             return self

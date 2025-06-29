@@ -8,14 +8,6 @@
 import Foundation
 import os
 
-enum CSASLog {
-    private static let subsystem = Bundle.main.bundleIdentifier ?? "FinCheck"
-    
-    static let network = OSLog(subsystem: subsystem, category: "🌐 Network")
-    static let decoding = OSLog(subsystem: subsystem, category: "🧩 Decoding")
-    static let general  = OSLog(subsystem: subsystem, category: "📋 General")
-}
-
 enum CSASError: LocalizedError {
     case invalidURL
     case decodingError
