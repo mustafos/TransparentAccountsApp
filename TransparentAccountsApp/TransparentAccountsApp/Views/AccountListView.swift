@@ -22,18 +22,14 @@ struct AccountListView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                 } else {
                     List(viewModel.accounts) { account in
-                        NavigationLink(destination: TransactionListView(account: account)) {
+                        NavigationLink(destination: AccountDetailView(account: account)) {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(account.name)
-                                    .font(.headline)
-                                Text(account.accountNumber)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                Text(account.name).font(.headline)
+                                Text(account.accountNumber).font(.subheadline).foregroundColor(.secondary)
                                 Text("💰 \(account.balance, specifier: "%.2f") \(account.currency ?? "")")
                                     .font(.caption)
                                     .foregroundColor(.gray)
-                            }
-                            .padding(.vertical, 4)
+                            }.padding(.vertical, 4)
                         }
                     }
                 }
@@ -43,10 +39,13 @@ struct AccountListView: View {
         .task {
             await viewModel.loadAccounts()
         }
+        .refreshable {
+            await viewModel.loadAccounts()
+        }
         .alert("Error", isPresented: Binding(
             get: { viewModel.alertMessage != nil },
-            set: { _ in viewModel.alertMessage = nil }
-        )) {
+            set: { _ in viewModel.alertMessage = nil })
+        ) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(viewModel.alertMessage ?? "Unknown error")
@@ -56,4 +55,29 @@ struct AccountListView: View {
 
 #Preview {
     AccountListView()
+}
+
+import SwiftUI
+
+struct AccountDetailView: View {
+    let account: TransparentAccount
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            Text(account.name)
+                .font(.title2)
+            Text("Account Number: \(account.accountNumber)")
+                .foregroundColor(.secondary)
+            Text("Balance: \(account.balance, specifier: "%.2f") \(account.currency ?? "")")
+                .foregroundColor(.gray)
+
+            NavigationLink("📄 View Transactions") {
+                TransactionListView(account: account)
+            }
+
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Account Detail")
+    }
 }

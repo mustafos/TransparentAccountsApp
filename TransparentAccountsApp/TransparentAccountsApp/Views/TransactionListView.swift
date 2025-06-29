@@ -31,20 +31,20 @@ struct TransactionListView: View {
                             if let info = transaction.remittanceInfo {
                                 Text(info).font(.footnote).foregroundColor(.gray)
                             }
-                        }
-                        .padding(.vertical, 4)
+                        }.padding(.vertical, 4)
                     }
                 }
             }
         }
         .navigationTitle(account.name)
         .task {
+            print("🔄 Loading transactions for", account.accountNumber)
             await viewModel.loadTransactions(accountId: account.accountNumber)
         }
         .alert("Error", isPresented: Binding(
             get: { viewModel.alertMessage != nil },
-            set: { _ in viewModel.alertMessage = nil }
-        )) {
+            set: { _ in viewModel.alertMessage = nil })
+        ) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(viewModel.alertMessage ?? "Unknown error")
