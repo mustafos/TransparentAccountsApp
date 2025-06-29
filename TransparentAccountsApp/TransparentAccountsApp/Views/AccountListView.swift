@@ -8,14 +8,30 @@
 import SwiftUI
 
 struct AccountListView: View {
+    @StateObject private var viewModel = AccountListViewModel()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack {
+            Group {
+                if viewModel.isLoading {
+                    ProgressView("Loading Accounts...")
+                } else {
+                    List(viewModel.accounts) { account in
+                        NavigationLink(destination: TransactionListView(account: account)) {
+                            VStack(alignment: .leading) {
+                                Text(account.name)
+                                    .font(.headline)
+                                Text(account.accountNumber)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Transparent Accounts")
+            .onAppear { viewModel.loadAccounts() }
         }
-        .padding()
     }
 }
 
