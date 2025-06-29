@@ -6,30 +6,33 @@
 //
 
 import Foundation
-import os
+
+enum ViewState {
+    case idle, loading, success, error(String)
+}
 
 @MainActor
-class AccountListViewModel: ObservableObject {
-    @Published var accounts: [TransparentAccount] = []
-    @Published var isLoading = false
-    @Published var alertMessage: String?
+final class AccountListViewModel: ObservableObject {
+    private let service: CSASServiceProtocol
+    private let logger: LoggerProtocol
     
-    private let service = CSASService()
+    @Published var accounts: [TransparentAccount] = []
+    @Published var state: ViewState = .idle
+    
+    init(service: CSASServiceProtocol = CSASService(), logger: LoggerProtocol = Logger()) {
+        self.service = service
+        self.logger = logger
+    }
     
     func loadAccounts() async {
-        isLoading = true
-        os_log("🔄 Start loading accounts", log: CSASLog.general, type: .info)
-        defer {
-            isLoading = false
-            os_log("✅ Finished loading accounts", log: CSASLog.general, type: .info)
-        }
-        
+        state = .loading
+        logger.log(.transactionDebug("📥 Loading accounts..."))
         do {
             accounts = try await service.fetchAccounts()
+            state = .success
         } catch {
-            alertMessage = error.localizedDescription
-            accounts = []
-            os_log("❌ Failed to load accounts: %@", log: CSASLog.general, type: .error, error.localizedDescription)
+            logger.log(.unknownError("❌ Account load error: \(error.localizedDescription)"))
+            state = .error(error.localizedDescription)
         }
     }
 }

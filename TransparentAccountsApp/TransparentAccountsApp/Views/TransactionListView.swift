@@ -13,52 +13,65 @@ struct TransactionListView: View {
     
     var body: some View {
         List {
-            if viewModel.isLoading {
+            switch viewModel.state {
+            case .idle, .loading:
                 ProgressView("Loading Transactions...")
-            } else if viewModel.transactions.isEmpty {
+                
+            case .empty:
                 Text("No transactions found.")
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, alignment: .center)
-            } else {
-                ForEach(viewModel.transactions) { transaction in
+                
+            case .success(let transactions):
+                ForEach(transactions) { transaction in
                     NavigationLink(destination: DetailView(transaction: transaction)) {
-                        HStack(spacing: 12) {
-                            Image(systemName: transaction.amount >= 0 ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
-                                .font(.title2)
-                                .foregroundColor(transaction.amount >= 0 ? .green : .red)
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("\(transaction.amount, specifier: "%.2f") \(transaction.currency)")
-                                    .font(.headline)
-                                    .foregroundColor(transaction.amount >= 0 ? .green : .red)
-                                
-                                if let name = transaction.counterPartyName {
-                                    Text("From: \(name)").font(.subheadline)
-                                }
-                                
-                                if let info = transaction.remittanceInfo {
-                                    Text(info).font(.footnote).foregroundColor(.gray)
-                                }
-                            }
-                        }
-                        .padding(.vertical, 6)
+                        TransactionListCellView(transaction: transaction)
                     }
                 }
+                
+            case .error(let message):
+                Text("❌ \(message)")
+                    .foregroundColor(.red)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
         }
         .navigationTitle("Transaction")
         .navigationBarTitleDisplayMode(.inline)
         .task {
-            print("🔄 Loading transactions for", account.accountNumber)
+            if case .success = viewModel.state { return }
             await viewModel.loadTransactions(accountId: account.accountNumber)
         }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.alertMessage != nil },
-            set: { _ in viewModel.alertMessage = nil })
-        ) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(viewModel.alertMessage ?? "Unknown error")
+        .refreshable {
+            await viewModel.loadTransactions(accountId: account.accountNumber)
         }
+    }
+}
+
+
+// MARK: - Transaction Cell
+struct TransactionListCellView: View {
+    let transaction: Transaction
+    
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: transaction.amount >= 0 ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
+                .font(.title2)
+                .foregroundColor(transaction.amount >= 0 ? .green : .red)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text("\(transaction.amount, specifier: "%.2f") \(transaction.currency)")
+                    .font(.headline)
+                    .foregroundColor(transaction.amount >= 0 ? .green : .red)
+                
+                if let name = transaction.counterPartyName {
+                    Text("From: \(name)").font(.subheadline)
+                }
+                
+                if let info = transaction.remittanceInfo {
+                    Text(info).font(.footnote).foregroundColor(.gray)
+                }
+            }
+        }
+        .padding(.vertical, 6)
     }
 }
