@@ -11,29 +11,55 @@ struct AccountDetailView: View {
     let account: TransparentAccount
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(account.name).font(.title2).bold()
-            Group {
-                Text("Account Number: \(account.accountNumber)")
-                Text("Bank Code: \(account.bankCode)")
-                Text("IBAN: \(account.iban)")
-                Text("Balance: \(account.balance, specifier: "%.2f") \(account.currency ?? "")")
-                Text("Transparency From: \(account.transparencyFrom.formattedDate())")
-                Text("Transparency To: \(account.transparencyTo.formattedDate())")
-                Text("Publication To: \(account.publicationTo.formattedDate())")
-                Text("Updated: \(account.actualizationDate.formattedDate())")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(account.name)
+                    .font(.title2).bold()
+                
+                accountInfoSection
+                
+                NavigationLink("📄 View Transactions") {
+                    TransactionListView(account: account)
+                }
+                
+                Spacer()
             }
-            .font(.subheadline)
-            .foregroundColor(.secondary)
-            
-            NavigationLink("📄 View Transactions") {
-                TransactionListView(account: account)
-            }
-            
-            Spacer()
+            .padding()
         }
-        .padding()
         .navigationTitle("Account Detail")
         .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private var accountInfoSection: some View {
+        Group {
+            LabeledText("Account Number", value: account.accountNumber)
+            LabeledText("Bank Code", value: account.bankCode)
+            LabeledText("IBAN", value: account.iban)
+            LabeledText("Balance", value: String(format: "%.2f %@", account.balance, account.currency ?? ""))
+            LabeledText("Transparency From", value: account.transparencyFrom.formattedDate())
+            LabeledText("Transparency To", value: account.transparencyTo.formattedDate())
+            LabeledText("Publication To", value: account.publicationTo.formattedDate())
+            LabeledText("Updated", value: account.actualizationDate.formattedDate())
+        }
+        .font(.subheadline)
+        .foregroundColor(.secondary)
+    }
+}
+
+struct LabeledText: View {
+    let label: String
+    let value: String
+    
+    init(_ label: String, value: String) {
+        self.label = label
+        self.value = value
+    }
+    
+    var body: some View {
+        HStack {
+            Text("\(label):")
+                .bold()
+            Text(value)
+        }
     }
 }
