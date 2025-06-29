@@ -7,62 +7,39 @@
 
 import Foundation
 
-class CSASService {
+final class CSASService {
     private let baseURL = Configurations.baseUrl
     private let apiKey = Configurations.apiKey
-    
-    func fetchAccounts(completion: @escaping ([TransparentAccount]) -> Void) {
-        guard let url = URL(string: baseURL) else { return }
-        
+
+    func fetchAccounts() async throws -> [TransparentAccount] {
+        guard let url = URL(string: baseURL) else {
+            throw URLError(.badURL)
+        }
+
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(apiKey, forHTTPHeaderField: "WEB-API-Key")
-        
-        URLSession.shared.dataTask(with: request) { data, _, _ in
-            guard let data = data else {
-                completion([])
-                return
-            }
-            
-            do {
-                let decoded = try JSONDecoder().decode(AccountsResponse.self, from: data)
-                print("✅ Decoded accounts:", decoded.accounts)
-                completion(decoded.accounts)
-            } catch {
-                print("❌ Decode error:", error)
-                print("📥 Raw:", String(data: data, encoding: .utf8) ?? "nil")
-                completion([])
-            }
-        }.resume()
+
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let decoded = try JSONDecoder().decode(AccountsResponse.self, from: data)
+        return decoded.accounts
     }
-    
-    func fetchTransactions(for accountId: String, completion: @escaping ([Transaction]) -> Void) {
-        let urlString = "\(baseURL)/\(accountId)/transactions"
-        guard let url = URL(string: urlString) else { return }
+
+    func fetchTransactions(for accountId: String) async throws -> [Transaction] {
+        guard let url = URL(string: "\(baseURL)/\(accountId)/transactions") else {
+            throw URLError(.badURL)
+        }
 
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue(apiKey, forHTTPHeaderField: "WEB-API-Key")
 
-        URLSession.shared.dataTask(with: request) { data, _, _ in
-            guard let data = data else {
-                completion([])
-                return
-            }
+        let (data, _) = try await URLSession.shared.data(for: request)
+        let wrapper = try JSONDecoder().decode(ResponseWrapper.self, from: data)
+        return wrapper.transactions
+    }
 
-            struct ResponseWrapper: Decodable {
-                let transactions: [Transaction]
-            }
-
-            do {
-                let wrapper = try JSONDecoder().decode(ResponseWrapper.self, from: data)
-                completion(wrapper.transactions)
-            } catch {
-                print("❌ Decode error:", error)
-                print("📥 Raw:", String(data: data, encoding: .utf8) ?? "nil")
-                completion([])
-            }
-        }.resume()
+    private struct ResponseWrapper: Decodable {
+        let transactions: [Transaction]
     }
 }

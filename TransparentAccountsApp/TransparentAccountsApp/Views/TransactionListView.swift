@@ -38,8 +38,8 @@ struct TransactionListView: View {
             }
         }
         .navigationTitle(account.name)
-        .onAppear {
-            viewModel.loadTransactions(accountId: account.accountNumber)
-        }
+        .task {
+                    await viewModel.loadTransactions(accountId: account.accountNumber)
+                }
     }
 }

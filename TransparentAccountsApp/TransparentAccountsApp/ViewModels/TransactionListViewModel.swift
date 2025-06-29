@@ -14,13 +14,9 @@ class TransactionListViewModel: ObservableObject {
 
     private let service = CSASService()
 
-    func loadTransactions(accountId: String) {
+    func loadTransactions(accountId: String) async {
         isLoading = true
-        service.fetchTransactions(for: accountId) { [weak self] transactions in
-            DispatchQueue.main.async {
-                self?.transactions = transactions
-                self?.isLoading = false
-            }
-        }
+        transactions = await service.fetchTransactions(for: accountId)
+        isLoading = false
     }
 }

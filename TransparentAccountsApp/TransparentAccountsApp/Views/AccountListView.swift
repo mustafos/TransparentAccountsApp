@@ -40,9 +40,9 @@ struct AccountListView: View {
             }
         }
         .navigationTitle("Transparent Accounts")
-        .onAppear {
-            viewModel.loadAccounts()
-        }
+        .task {
+                        await viewModel.loadAccounts()
+                    }
 
     }
 }

@@ -14,13 +14,9 @@ class AccountListViewModel: ObservableObject {
 
     private let service = CSASService()
 
-    func loadAccounts() {
+    func loadAccounts() async {
         isLoading = true
-        service.fetchAccounts { [weak self] fetched in
-            DispatchQueue.main.async {
-                self?.accounts = fetched
-                self?.isLoading = false
-            }
-        }
+        accounts = await service.fetchAccounts()
+        isLoading = false
     }
 }

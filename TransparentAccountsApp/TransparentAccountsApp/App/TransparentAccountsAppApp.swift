@@ -11,7 +11,7 @@ import SwiftUI
 struct TransparentAccountsAppApp: App {
     var body: some Scene {
         WindowGroup {
-            AccountListView()
+            LaunchView()
         }
     }
 }
