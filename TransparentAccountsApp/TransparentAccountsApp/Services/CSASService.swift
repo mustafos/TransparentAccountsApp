@@ -8,6 +8,11 @@
 import Foundation
 import os
 
+protocol CSASServiceProtocol {
+    func fetchAccounts() async throws -> [TransparentAccount]
+    func fetchTransactions(for accountId: String) async throws -> [Transaction]
+}
+
 enum CSASError: LocalizedError {
     case invalidURL
     case decodingError
@@ -28,9 +33,9 @@ enum CSASError: LocalizedError {
     }
 }
 
-final class CSASService {
+final class CSASService: CSASServiceProtocol {
     private let baseURL = Configurations.baseUrl
-    private let apiKey = Configurations.apiKey
+    private let apiKey = Secrets.csasApiKey
     
     /// Generic method to fetch and decode any Decodable response
     private func fetch<T: Decodable>(_ path: String) async throws -> T {

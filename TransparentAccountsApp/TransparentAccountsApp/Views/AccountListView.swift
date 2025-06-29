@@ -8,45 +8,29 @@
 import SwiftUI
 
 struct AccountListView: View {
-    @StateObject private var viewModel = AccountListViewModel()
+    @StateObject var viewModel = AccountListViewModel()
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             Group {
-                if viewModel.isLoading {
-                    ProgressView("Loading Accounts...")
-                        .frame(maxWidth: .infinity, alignment: .center)
-                } else if viewModel.accounts.isEmpty {
-                    Text("No accounts found.")
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                } else {
+                switch viewModel.state {
+                case .idle, .loading:
+                    ProgressView("Loading...")
+                case .success:
                     List(viewModel.accounts) { account in
                         NavigationLink(destination: AccountDetailView(account: account)) {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(account.name).font(.headline)
-                                Text("💰 \(account.balance, specifier: "%.2f")")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
-                            }.padding(.vertical, 4)
+                            Text(account.name)
                         }
                     }
+                case .error(let message):
+                    Text("❌ \(message)")
+                        .foregroundColor(.red)
                 }
-            }.navigationTitle("Transparent Accounts")
+            }
+            .navigationTitle("Transparent Accounts")
         }
         .task {
             await viewModel.loadAccounts()
-        }
-        .refreshable {
-            await viewModel.loadAccounts()
-        }
-        .alert("Error", isPresented: Binding(
-            get: { viewModel.alertMessage != nil },
-            set: { _ in viewModel.alertMessage = nil })
-        ) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(viewModel.alertMessage ?? "Unknown error")
         }
     }
 }

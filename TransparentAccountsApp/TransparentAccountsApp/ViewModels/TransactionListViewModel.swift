@@ -8,29 +8,35 @@
 import Foundation
 import os
 
+enum TransactionViewState {
+    case idle, loading, success([Transaction]), empty, error(String)
+}
+
 @MainActor
-class TransactionListViewModel: ObservableObject {
+final class TransactionListViewModel: ObservableObject {
+    private let service: CSASServiceProtocol
     @Published var transactions: [Transaction] = []
-    @Published var isLoading = false
-    @Published var alertMessage: String?
+    @Published var state: TransactionViewState = .idle
     
-    private let service = CSASService()
+    init(service: CSASServiceProtocol = CSASService()) {
+        self.service = service
+    }
     
     func loadTransactions(accountId: String) async {
-        isLoading = true
-        os_log("🔄 Start loading transactions for %{public}s", log: CSASLog.general, type: .info, accountId)
-        transactions = []
-        defer {
-            isLoading = false
-            os_log("✅ Finished loading transactions for %{public}s", log: CSASLog.general, type: .info, accountId)
-        }
+        state = .loading
+        os_log("🔄 Loading for %{public}s", log: CSASLog.general, type: .info, accountId)
         
         do {
-            transactions = try await service.fetchTransactions(for: accountId)
+            let txs = try await service.fetchTransactions(for: accountId)
+            transactions = txs
+            if txs.isEmpty {
+                state = .empty
+            } else {
+                state = .success(txs)
+            }
         } catch {
-            alertMessage = error.localizedDescription
-            transactions = []
-            os_log("❌ Failed to load transactions: %@", log: CSASLog.general, type: .error, error.localizedDescription)
+            state = .error(error.localizedDescription)
+            os_log("❌ Error loading txs: %@", log: CSASLog.general, type: .error, error.localizedDescription)
         }
     }
 }
