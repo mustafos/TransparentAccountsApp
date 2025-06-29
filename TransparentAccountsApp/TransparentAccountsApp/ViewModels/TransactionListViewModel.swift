@@ -6,3 +6,21 @@
 //
 
 import Foundation
+
+@MainActor
+class TransactionListViewModel: ObservableObject {
+    @Published var transactions: [TransparentTransaction] = []
+    @Published var isLoading = false
+
+    private let service = CSASService()
+
+    func loadTransactions(accountId: String) {
+        isLoading = true
+        service.fetchTransactions(for: accountId) { [weak self] transactions in
+            DispatchQueue.main.async {
+                self?.transactions = transactions
+                self?.isLoading = false
+            }
+        }
+    }
+}

@@ -6,3 +6,52 @@
 //
 
 import Foundation
+
+class CSASService {
+    private let baseURL = Configurations.baseUrl
+
+    func fetchAccounts(completion: @escaping ([TransparentAccount]) -> Void) {
+        guard let url = URL(string: baseURL) else { return }
+
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            guard let data = data else {
+                completion([])
+                return
+            }
+
+            if let accounts = try? JSONDecoder().decode([TransparentAccount].self, from: data) {
+                completion(accounts)
+            } else {
+                completion([])
+            }
+        }.resume()
+    }
+
+    func fetchTransactions(for accountId: String, completion: @escaping ([TransparentTransaction]) -> Void) {
+        let urlString = "\(baseURL)/\(accountId)/transactions"
+        guard let url = URL(string: urlString) else { return }
+
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            guard let data = data else {
+                completion([])
+                return
+            }
+
+            struct Wrapper: Decodable {
+                let transactions: [TransparentTransaction]
+            }
+
+            if let wrapper = try? JSONDecoder().decode(Wrapper.self, from: data) {
+                completion(wrapper.transactions)
+            } else {
+                completion([])
+            }
+        }.resume()
+    }
+}

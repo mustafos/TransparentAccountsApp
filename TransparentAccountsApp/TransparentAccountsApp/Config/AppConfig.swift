@@ -10,5 +10,6 @@ import SwiftUI
 enum Configurations {
     // MARK: App Basic Info
     static let appName: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String ?? "Unknown App Name"
-    static let appToken: String = "some token"
+    static let accountId: String = "51930011-8925-4777-ba73-1dd422bb09c3"
+    static let baseUrl: String = "https://webapi.developers.erstegroup.com/api/csas/public/sandbox/v3/transparentAccounts"
 }
