@@ -2,80 +2,127 @@
 
 **FinCheck** is a SwiftUI-based iOS app for browsing publicly available transparent bank accounts and their transactions using the official ČSAS public API.
 
+---
+
 ## 📱 Features
 
-- 🔍 Browse a list of transparent accounts with name, number, balance, and currency
-- 📋 View detailed account information including IBAN, bank code, transparency periods, and last update
-- 💸 Explore transaction history with icons, amount direction (positive/negative), and metadata
-- 🔎 Transaction detail screen with sender, counterparty, remittance info, and dates
-- 🔄 Pull-to-refresh and automatic data loading
-- ⚠️ Error handling for network issues and decoding errors
-- 🧩 Logging with `os_log` categorized by Network, Decoding, and General
+- 🔍 Browse a list of transparent accounts
+- 📋 View detailed account info: IBAN, bank code, balance, transparency periods
+- 💸 Explore transactions with direction, sender, counterparty, and description
+- 🔄 Pull-to-refresh and loading states
+- ⚠️ Error messages on failure (network/decoding)
+- 🧩 Logging with `os_log`
+
+---
 
 ## ⚙️ Tech Stack
 
 - iOS 18.5
-- SwiftUI (MVVM)
+- SwiftUI + MVVM
 - `URLSession` for networking
-- `os_log` for structured logging
+- `.xcconfig`-based secret management
+- `os_log` for logging
+
+---
 
 ## 🚀 Getting Started
 
-1. Clone this repository
-2. Open `TransparentAccountsApp.xcodeproj` in Xcode 15+
-3. Update `Configurations.swift` with your API key:
-
-```swift
-enum Configurations {
-    static let baseUrl = "https://www.csas.cz/webapi/api/v1/transparentAccounts"
-    static let apiKey = "<your-public-api-key>"
-}
+1. Clone this repository:
+```bash
+git clone https://github.com/mustafos/TransparentAccountsApp.git
 ```
 
-4. Build and run on a simulator or device
+2. Open `TransparentAccountsApp.xcodeproj` in Xcode 15+
+
+3. Set up the API key:
+
+- Create a file `Secrets.xcconfig` at the root of the project:
+```sh
+touch Secrets.xcconfig
+```
+- Add the following content:
+```xcconfig
+CSAS_API_KEY = your-public-api-key
+```
+
+- Example template:
+```xcconfig
+# Secrets.xcconfig.example
+CSAS_API_KEY = <# Insert your CSAS API key here #>
+```
+
+- Ensure `Info.plist` (already included) contains:
+```xml
+<key>CSAS_API_KEY</key>
+<string>$(CSAS_API_KEY)</string>
+```
+> 💡 `Secrets.xcconfig.example` is included as a reference.  
+> Do **not** commit your actual `Secrets.xcconfig` — it's gitignored for security.
+
+4. Build and run the app.
+
+---
 
 ## 🔐 API Info
 
 Data is fetched from the official ČSAS Transparent Accounts API:  
-🔗 [https://developers.csas.cz/portal/product/transparent-accounts-v1](https://developers.csas.cz/portal/product/transparent-accounts-v1)
+🔗 [ERSTE Group](https://developers.csas.cz/portal/product/transparent-accounts-v1)
 
-The API allows:
-- Fetching a list of transparent accounts
-- Fetching transactions by account number
+---
 
 ## 🧪 Preview
 
 ![FinCheck App](https://github.com/mustafos/mustafos/blob/master/assets/fincheck.gif)
+
+---
 
 ## 📁 Project Structure
 
 ```
 TransparentAccountsApp
 ├── Models/
-│   ├── TransparentAccount.swift
-│   └── Transaction.swift
-├── Views/
-│   ├── AccountListView.swift
-│   ├── AccountDetailView.swift
-│   ├── TransactionListView.swift
-│   └── DetailView.swift
+│   ├── Transaction/
+│   │   ├── Transaction.swift
+│   │   └── Transaction+Equatable.swift
+│   └── Account.swift
+├── Services/
+│   └── CSASService.swift
 ├── ViewModels/
 │   ├── AccountListViewModel.swift
 │   └── TransactionListViewModel.swift
-├── Services/
-│   └── CSASService.swift
+├── Views/
+│   ├── Account/
+│   │   ├── AccountListView.swift
+│   │   └── AccountDetailView.swift
+│   ├── Transaction/
+│   │   ├── TransactionListView.swift
+│   │   └── TransactionDetailView.swift
+│   └── Components/
+│       ├── InfoRow.swift
+│       └── TransactionListCellView.swift
 ├── Utils/
-│   ├── AppConfig.swift
 │   ├── CSASLog.swift
-│   └── DateFormatter+Extensions.swift
-└── TransparentAccountsAppApp.swift
+│   ├── Secrets.swift
+│   └── Extensions/
+│       ├── Date+Ext.swift
+│       └── Transaction+Ext.swift
+├── Assets.xcassets
+├── Info.plist
+├── Secrets.xcconfig
+├── TransparentAccountsAppApp.swift
+└── TransparentAccountsAppTests/
+├── MockTransactions.json
+└── TransactionListViewModelTests.swift
 ```
 
-## 🧹 To Do
+---
 
-- Add search functionality by account name or number
-- Support dark mode
-- Add unit tests for `CSASService`
+## ✅ To Do
+
+- [ ] Add search bar to filter accounts
+- [ ] Support Dark Mode
+- [x] Add unit tests for `CSASService`
+- [x] Refactor config/secret management via `.xcconfig`
 
 ---
 

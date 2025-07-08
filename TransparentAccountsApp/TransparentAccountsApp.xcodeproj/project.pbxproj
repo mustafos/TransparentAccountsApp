@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		6AE6AC732E1D145B008A9799 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6A2A46132E1153CE004AA3DB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6A2A461A2E1153CE004AA3DB;
+			remoteInfo = TransparentAccountsApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		6A2A461B2E1153CE004AA3DB /* TransparentAccountsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TransparentAccountsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6AE6AC6F2E1D145B008A9799 /* TransparentAccountsAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TransparentAccountsAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -29,10 +40,22 @@
 			path = TransparentAccountsApp;
 			sourceTree = "<group>";
 		};
+		6AE6AC702E1D145B008A9799 /* TransparentAccountsAppTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TransparentAccountsAppTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		6A2A46182E1153CE004AA3DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AE6AC6C2E1D145B008A9799 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				6A2A461D2E1153CE004AA3DB /* TransparentAccountsApp */,
+				6AE6AC702E1D145B008A9799 /* TransparentAccountsAppTests */,
 				6A2A461C2E1153CE004AA3DB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				6A2A461B2E1153CE004AA3DB /* TransparentAccountsApp.app */,
+				6AE6AC6F2E1D145B008A9799 /* TransparentAccountsAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +108,29 @@
 			productReference = 6A2A461B2E1153CE004AA3DB /* TransparentAccountsApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		6AE6AC6E2E1D145B008A9799 /* TransparentAccountsAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6AE6AC772E1D145B008A9799 /* Build configuration list for PBXNativeTarget "TransparentAccountsAppTests" */;
+			buildPhases = (
+				6AE6AC6B2E1D145B008A9799 /* Sources */,
+				6AE6AC6C2E1D145B008A9799 /* Frameworks */,
+				6AE6AC6D2E1D145B008A9799 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6AE6AC742E1D145B008A9799 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				6AE6AC702E1D145B008A9799 /* TransparentAccountsAppTests */,
+			);
+			name = TransparentAccountsAppTests;
+			packageProductDependencies = (
+			);
+			productName = TransparentAccountsAppTests;
+			productReference = 6AE6AC6F2E1D145B008A9799 /* TransparentAccountsAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -95,6 +143,10 @@
 				TargetAttributes = {
 					6A2A461A2E1153CE004AA3DB = {
 						CreatedOnToolsVersion = 16.4;
+					};
+					6AE6AC6E2E1D145B008A9799 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 6A2A461A2E1153CE004AA3DB;
 					};
 				};
 			};
@@ -113,12 +165,20 @@
 			projectRoot = "";
 			targets = (
 				6A2A461A2E1153CE004AA3DB /* TransparentAccountsApp */,
+				6AE6AC6E2E1D145B008A9799 /* TransparentAccountsAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		6A2A46192E1153CE004AA3DB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6AE6AC6D2E1D145B008A9799 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -135,11 +195,28 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6AE6AC6B2E1D145B008A9799 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		6AE6AC742E1D145B008A9799 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6A2A461A2E1153CE004AA3DB /* TransparentAccountsApp */;
+			targetProxy = 6AE6AC732E1D145B008A9799 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		6A2A463A2E1153CF004AA3DB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 6A2A461D2E1153CE004AA3DB /* TransparentAccountsApp */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -203,6 +280,8 @@
 		};
 		6A2A463B2E1153CF004AA3DB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 6A2A461D2E1153CE004AA3DB /* TransparentAccountsApp */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -259,6 +338,8 @@
 		};
 		6A2A463D2E1153CF004AA3DB /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 6A2A461D2E1153CE004AA3DB /* TransparentAccountsApp */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -292,6 +373,8 @@
 		};
 		6A2A463E2E1153CF004AA3DB /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 6A2A461D2E1153CE004AA3DB /* TransparentAccountsApp */;
+			baseConfigurationReferenceRelativePath = Secrets.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -323,6 +406,40 @@
 			};
 			name = Release;
 		};
+		6AE6AC752E1D145B008A9799 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mustafos.TransparentAccountsAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TransparentAccountsApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TransparentAccountsApp";
+			};
+			name = Debug;
+		};
+		6AE6AC762E1D145B008A9799 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mustafos.TransparentAccountsAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TransparentAccountsApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TransparentAccountsApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -340,6 +457,15 @@
 			buildConfigurations = (
 				6A2A463D2E1153CF004AA3DB /* Debug */,
 				6A2A463E2E1153CF004AA3DB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6AE6AC772E1D145B008A9799 /* Build configuration list for PBXNativeTarget "TransparentAccountsAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6AE6AC752E1D145B008A9799 /* Debug */,
+				6AE6AC762E1D145B008A9799 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

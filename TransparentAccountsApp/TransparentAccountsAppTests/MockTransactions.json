@@ -1,0 +1,17 @@
+[
+  {
+    "amount": {
+      "value": 1500.0,
+      "currency": "CZK"
+    },
+    "processingDate": "2024-01-01",
+    "typeDescription": "Platba",
+    "remittanceInfo": "Test payment",
+    "counterPartyName": "John Doe",
+    "transactionDate": "2024-01-01",
+    "specification": "123",
+    "sender": {
+      "name": "Test Sender"
+    }
+  }
+]

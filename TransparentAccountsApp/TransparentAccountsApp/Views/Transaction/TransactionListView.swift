@@ -24,7 +24,7 @@ struct TransactionListView: View {
                 
             case .success(let transactions):
                 ForEach(transactions) { transaction in
-                    NavigationLink(destination: DetailView(transaction: transaction)) {
+                    NavigationLink(destination: TransactionDetailView(transaction: transaction)) {
                         TransactionListCellView(transaction: transaction)
                     }
                 }
@@ -44,34 +44,5 @@ struct TransactionListView: View {
         .refreshable {
             await viewModel.loadTransactions(accountId: account.accountNumber)
         }
-    }
-}
-
-
-// MARK: - Transaction Cell
-struct TransactionListCellView: View {
-    let transaction: Transaction
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: transaction.amount >= 0 ? "arrow.up.circle.fill" : "arrow.down.circle.fill")
-                .font(.title2)
-                .foregroundColor(transaction.amount >= 0 ? .green : .red)
-            
-            VStack(alignment: .leading, spacing: 4) {
-                Text("\(transaction.amount, specifier: "%.2f") \(transaction.currency)")
-                    .font(.headline)
-                    .foregroundColor(transaction.amount >= 0 ? .green : .red)
-                
-                if let name = transaction.counterPartyName {
-                    Text("From: \(name)").font(.subheadline)
-                }
-                
-                if let info = transaction.remittanceInfo {
-                    Text(info).font(.footnote).foregroundColor(.gray)
-                }
-            }
-        }
-        .padding(.vertical, 6)
     }
 }

@@ -31,6 +31,7 @@ final class TransactionListViewModel: ObservableObject {
         do {
             let txs = try await service.fetchTransactions(for: accountId)
             transactions = txs
+            
             if txs.isEmpty {
                 state = .empty
             } else {
