@@ -122,4 +122,5 @@ Secrets.xcconfig.example
 
 *.swp
 *.orig
-*.rej
+*.rejSecrets.xcconfig
+Secrets.xcconfig
