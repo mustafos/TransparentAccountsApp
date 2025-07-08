@@ -1,62 +1,125 @@
-# Xcode
-#
-# gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
+# ===============================
+# MARK: - Xcode
+# ===============================
 
 ## User settings
 xcuserdata/
+*.xcuserstate
+xcshareddata/
 
-## Obj-C/Swift specific
+## Derived data
+DerivedData/
+
+## Build artifacts
+*.xcarchive
+*.xcresult
 *.hmap
-
-## App packaging
 *.ipa
 *.dSYM.zip
 *.dSYM
+*.tmp
+*.lock
 
-## Playgrounds
+## Index
+*.xcscmblueprint
+
+## Previews
+*.preview-thumbnails
+
+## Temp xcconfig
+*.xcconfigtemp
+
+# ===============================
+# MARK: - Swift
+# ===============================
+
+# SwiftPM
+.build/
+Package.resolved
+.swiftpm/
+# Packages/
+.xcode-build/
+
+# Swift Playgrounds
 timeline.xctimeline
 playground.xcworkspace
 
-# Swift Package Manager
-#
-# Add this line if you want to avoid checking in source code from Swift Package Manager dependencies.
-# Packages/
-# Package.pins
-# Package.resolved
-# *.xcodeproj
-#
-# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
-# hence it is not needed unless you have added a package configuration file to your project
-# .swiftpm
+# Snapshot testing
+__Snapshots__/
 
-.build/
+# SwiftLint / SwiftFormat / Sourcery
+.swiftlint.yml
+.swiftformat
+.generated/
 
-# CocoaPods
-#
-# We recommend against adding the Pods directory to your .gitignore. However
-# you should judge for yourself, the pros and cons are mentioned at:
-# https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
-#
-# Pods/
-#
-# Add this line if you want to avoid checking in source code from the Xcode workspace
-# *.xcworkspace
+# XCTest
+*.xctest
 
-# Carthage
-#
-# Add this line if you want to avoid checking in source code from Carthage dependencies.
-# Carthage/Checkouts
+# Simulators / Devices
+*.deviceinfo
+*.deviceudid
 
+# ===============================
+# MARK: - CocoaPods
+# ===============================
+
+Pods/
+Podfile.lock
+*.xcworkspace
+
+# ===============================
+# MARK: - Carthage
+# ===============================
+
+Carthage/
 Carthage/Build/
+Carthage/Checkouts/
 
-# fastlane
-#
-# It is recommended to not store the screenshots in the git repo.
-# Instead, use fastlane to re-generate the screenshots whenever they are needed.
-# For more information about the recommended setup visit:
-# https://docs.fastlane.tools/best-practices/source-control/#source-control
+# ===============================
+# MARK: - Fastlane
+# ===============================
 
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# ===============================
+# MARK: - Secrets & Config
+# ===============================
+
+Secrets.xcconfig
+Secrets.xcconfig.example
+.env
+*.env
+
+# ===============================
+# MARK: - Logs
+# ===============================
+
+*.log
+
+# ===============================
+# MARK: - IDEs and Tools
+# ===============================
+
+# JetBrains IDEs
+.idea/
+
+# VSCode
+.vscode/
+
+# ===============================
+# MARK: - macOS Metadata
+# ===============================
+
+.DS_Store
+*.moved-aside
+
+# ===============================
+# MARK: - Misc
+# ===============================
+
+*.swp
+*.orig
+*.rej
