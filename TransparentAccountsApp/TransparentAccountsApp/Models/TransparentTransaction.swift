@@ -27,10 +27,18 @@ struct Transaction: Decodable, Identifiable {
     private struct Amount: Decodable {
         let value: Double
         let currency: String
+        
+        private enum CodingKeys: String, CodingKey {
+            case value, currency
+        }
     }
     
     private struct Sender: Decodable {
         let name: String?
+        
+        private enum CodingKeys: String, CodingKey {
+            case name
+        }
     }
     
     init(from decoder: Decoder) throws {

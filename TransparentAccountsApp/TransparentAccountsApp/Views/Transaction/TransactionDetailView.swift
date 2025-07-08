@@ -1,5 +1,5 @@
 //
-//  DetailView.swift
+//  TransactionDetailView.swift
 //  TransparentAccountsApp
 //
 //  Created by Mustafa Bekirov on 29.06.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DetailView: View {
+struct TransactionDetailView: View {
     let transaction: Transaction
     
     var body: some View {
@@ -51,7 +51,6 @@ struct DetailView: View {
                     Text(date.formattedDate())
                 }
             }
-        }
-        .navigationTitle("Transaction Detail")
+        }.navigationTitle("Transaction Detail")
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct TransparentAccount: Codable, Identifiable {
+struct TransparentAccount: Decodable, Identifiable {
     var id: String { accountNumber }
     let accountNumber: String
     let bankCode: String
