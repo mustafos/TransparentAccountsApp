@@ -19,7 +19,7 @@ final class AccountListViewModel: ObservableObject {
     @Published var accounts: [TransparentAccount] = []
     @Published var state: ViewState = .idle
     
-    init(service: CSASServiceProtocol = CSASService(), logger: LoggerProtocol = Logger()) {
+    init(service: CSASServiceProtocol, logger: LoggerProtocol) {
         self.service = service
         self.logger = logger
     }

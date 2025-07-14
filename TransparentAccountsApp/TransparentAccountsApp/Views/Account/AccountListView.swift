@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct AccountListView: View {
-    @StateObject var viewModel = AccountListViewModel()
+    @StateObject var viewModel: AccountListViewModel
+    
+    init(viewModel: AccountListViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         NavigationView {
@@ -26,8 +30,7 @@ struct AccountListView: View {
                     Text("❌ \(message)")
                         .foregroundColor(.red)
                 }
-            }
-            .navigationTitle("Transparent Accounts")
+            }.navigationTitle("Transparent Accounts")
         }
         .task {
             await viewModel.loadAccounts()
@@ -36,5 +39,5 @@ struct AccountListView: View {
 }
 
 #Preview {
-    AccountListView()
+    AccountListView(viewModel: AppDIContainer().makeAccountListViewModel())
 }
