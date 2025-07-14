@@ -11,6 +11,7 @@ enum ViewState {
     case idle, loading, success, error(String)
 }
 
+@MainActor
 final class AccountListViewModel: ObservableObject {
     private let service: CSASServiceProtocol
     private let logger: LoggerProtocol

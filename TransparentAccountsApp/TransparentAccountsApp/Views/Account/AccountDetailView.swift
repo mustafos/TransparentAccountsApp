@@ -20,8 +20,10 @@ struct AccountDetailView: View {
                 accountInfoSection
                 
                 NavigationLink("📄 View Transactions") {
-                    TransactionListView(account: account,
-                                        viewModel: diContainer.app.makeTransactionListViewModel())
+                    TaskView {
+                        let vm = await diContainer.app.makeTransactionListViewModel()
+                        return TransactionListView(account: account, viewModel: vm)
+                    }
                 }
             }.padding()
         }

@@ -21,11 +21,11 @@ final class AppDIContainer {
     lazy var service: CSASServiceProtocol = CSASService(logger: logger)
     
     // ViewModel factories
-    func makeAccountListViewModel() -> AccountListViewModel {
-        AccountListViewModel(service: service, logger: logger)
+    func makeAccountListViewModel() async -> AccountListViewModel {
+        await AccountListViewModel(service: service, logger: logger)
     }
-    
-    func makeTransactionListViewModel() -> TransactionListViewModel {
-        TransactionListViewModel(service: service, logger: logger)
+
+    func makeTransactionListViewModel() async -> TransactionListViewModel {
+        await TransactionListViewModel(service: service, logger: logger)
     }
 }

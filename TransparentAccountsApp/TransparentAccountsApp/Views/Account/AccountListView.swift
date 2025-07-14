@@ -40,5 +40,6 @@ struct AccountListView: View {
 }
 
 #Preview {
-    AccountListView(viewModel: AppDIContainer().makeAccountListViewModel())
+    AccountListView(viewModel: .init(service: CSASService(), logger: Logger()))
+        .environmentObject(DIContainer())
 }
