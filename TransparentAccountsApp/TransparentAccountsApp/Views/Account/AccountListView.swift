@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AccountListView: View {
     @StateObject var viewModel: AccountListViewModel
+    @EnvironmentObject var diContainer: DIContainer
     
     init(viewModel: AccountListViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)

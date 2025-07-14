@@ -8,8 +8,14 @@
 import SwiftUI
 
 struct TransactionListView: View {
+    
     let account: TransparentAccount
-    @StateObject private var viewModel = TransactionListViewModel()
+    @StateObject private var viewModel: TransactionListViewModel
+    
+    init(account: TransparentAccount, viewModel: TransactionListViewModel) {
+        self.account = account
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     
     var body: some View {
         List {

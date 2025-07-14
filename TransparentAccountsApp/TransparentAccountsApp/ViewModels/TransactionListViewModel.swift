@@ -11,7 +11,6 @@ enum TransactionViewState {
     case idle, loading, success([Transaction]), empty, error(String)
 }
 
-@MainActor
 final class TransactionListViewModel: ObservableObject {
     private let service: CSASServiceProtocol
     private let logger: LoggerProtocol
@@ -19,7 +18,7 @@ final class TransactionListViewModel: ObservableObject {
     @Published var transactions: [Transaction] = []
     @Published var state: TransactionViewState = .idle
     
-    init(service: CSASServiceProtocol = CSASService(), logger: LoggerProtocol = Logger()) {
+    init(service: CSASServiceProtocol, logger: LoggerProtocol) {
         self.service = service
         self.logger = logger
     }

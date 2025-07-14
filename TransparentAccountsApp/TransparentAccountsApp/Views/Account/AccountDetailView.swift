@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AccountDetailView: View {
     let account: TransparentAccount
+    @EnvironmentObject var diContainer: DIContainer
     
     var body: some View {
         ScrollView {
@@ -19,7 +20,8 @@ struct AccountDetailView: View {
                 accountInfoSection
                 
                 NavigationLink("📄 View Transactions") {
-                    TransactionListView(account: account)
+                    TransactionListView(account: account,
+                                        viewModel: diContainer.app.makeTransactionListViewModel())
                 }
             }.padding()
         }

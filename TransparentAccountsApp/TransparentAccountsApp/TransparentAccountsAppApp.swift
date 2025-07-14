@@ -9,11 +9,12 @@ import SwiftUI
 
 @main
 struct TransparentAccountsAppApp: App {
-    private let diContainer = AppDIContainer()
+    @StateObject private var diContainer = DIContainer()
+    
     var body: some Scene {
         WindowGroup {
-//            AccountListView()
-            AccountListView(viewModel: diContainer.makeAccountListViewModel())
+            AccountListView(viewModel: diContainer.app.makeAccountListViewModel())
+                .environmentObject(diContainer)
         }
     }
 }
